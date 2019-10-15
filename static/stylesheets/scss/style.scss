@@ -1,0 +1,67 @@
+body > .container {
+  padding-top: 5%;
+}
+
+p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
+    text-decoration: none !important;
+}
+
+.home_page_books{
+    overflow: hidden;
+    background-color: blanchedalmond;
+    border: 1px solid burlywood;
+    height: 230px;
+    width: 150px;
+    margin: 1%;
+    border-radius: 10px;
+}
+
+.book_block_img{
+    height: 230px;
+    width: 150px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom: 1px solid burlywood;
+    transition: all .5s ease;
+}
+
+.home_page_books:hover .book_block_img{
+    margin-top: -70px;
+    height: 230px;
+    width: 150px;
+}
+.book_block_title{
+    font-size: 12px;
+    font-style: normal;
+    font-weight: bold;
+    margin-left: 3%;
+}
+.book_block_info{
+    margin-top: -20px;
+    margin-left: 3%;
+    color: #1b1e21;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.star-ratings {
+    unicode-bidi: bidi-override;
+    color: #4e504e;
+    font-size: 15px;
+    height: 15px;
+    width: 50px;
+    position: relative;
+    padding-bottom: 18px;
+}
+.star-ratings-top {
+    color: gold;
+    position: absolute;
+    z-index: 1;
+    display:block;
+    overflow: hidden;
+    width: 0;
+}
+.star-ratings-bottom {
+    z-index: 0;
+}

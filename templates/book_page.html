@@ -1,0 +1,43 @@
+{% extends "header.html" %}
+{% block title %}Book Details{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <img class="img-fluid" src="{{image_url}}">
+            </div>
+
+            <table class="table col-8">
+                <tbody>
+                    <tr>
+                      <th scope="row">ISBN</th>
+                      <td>{{ review_stat.isbn|safe }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">ISBN13</th>
+                      <td>{{ review_stat.isbn13|safe }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total ratings</th>
+                      <td>{{ review_stat.rating_count|safe }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">Average rating</th>
+                      <td>{{ review_stat.avg_rating|safe }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Total reviews</th>
+                      <td>{{ review_stat.review_count|safe }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        {{ review_widget|safe }}
+    </div>
+
+    
+{% endblock %}
