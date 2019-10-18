@@ -1,0 +1,180 @@
+/************************************************************************
+                                  Colors
+**********************************************************************/
+/************************************************************************
+                                Typography
+**********************************************************************/
+/************************************************************************
+                                Media Queries
+**********************************************************************/
+/************************************************************************
+                                Media Queries END
+**********************************************************************/
+/************************************************************************
+                                  Colors
+**********************************************************************/
+/************************************************************************
+                                Typography
+**********************************************************************/
+/************************************************************************
+                                Media Queries
+**********************************************************************/
+/************************************************************************
+                                Media Queries END
+**********************************************************************/
+/*
+  Responsive blocks
+ */
+.home_page_books {
+  overflow: hidden;
+  background-color: #fbeec1;
+  border: 1px solid #fbeec1;
+  margin: 1%;
+  border-radius: 10px;
+}
+@media only screen and (min-device-width: 920px) {
+  .home_page_books {
+    height: 230px;
+    width: 150px;
+  }
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .home_page_books {
+    height: 350px;
+    width: 230px;
+  }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+  .home_page_books {
+    height: 250px;
+    width: 170px;
+  }
+}
+.home_page_books:hover .book_block_img {
+  margin-top: -70px;
+}
+
+.book_block_img {
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border-bottom: 1px solid #fbeec1;
+  transition: all 0.5s ease;
+}
+
+.book_block_title {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 3%;
+}
+
+.book_block_info {
+  margin-top: -20px;
+  margin-left: 3%;
+  color: #3a3a3a;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+}
+
+/*
+  Responsive blocks END
+*/
+/************************************************************************
+                                  Colors
+**********************************************************************/
+/************************************************************************
+                                Typography
+**********************************************************************/
+/************************************************************************
+                                Media Queries
+**********************************************************************/
+/************************************************************************
+                                Media Queries END
+**********************************************************************/
+.form-container {
+  position: absolute;
+  background-color: #afe3dd;
+  padding: 5%;
+}
+@media only screen and (min-device-width: 920px) {
+  .form-container {
+    width: 40%;
+    left: 50%;
+    margin-left: -20%;
+  }
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .form-container {
+    width: 100%;
+    padding: 2% 20% 20% 20%;
+  }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+  .form-container {
+    width: 100%;
+  }
+}
+
+/************************************************************************
+                                  Colors
+**********************************************************************/
+/************************************************************************
+                                Typography
+**********************************************************************/
+/************************************************************************
+                                Media Queries
+**********************************************************************/
+/************************************************************************
+                                Media Queries END
+**********************************************************************/
+p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
+  text-decoration: none !important;
+}
+
+#search-bar {
+  margin-right: 30%;
+}
+
+/*
+Start Rating
+ */
+.star-ratings-small {
+  unicode-bidi: bidi-override;
+  color: #4e504e;
+  font-size: 15px;
+  height: 15px;
+  width: 50px;
+  position: relative;
+  padding-bottom: 18px;
+}
+
+.star-ratings-large {
+  unicode-bidi: bidi-override;
+  color: rgba(91, 93, 91, 0.42);
+  font-size: 30px;
+  height: 20px;
+  width: 60px;
+  position: relative;
+  margin: -15px 0 15px 0;
+}
+
+.star-ratings-top {
+  color: gold;
+  position: absolute;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  width: 0;
+}
+
+.star-ratings-bottom {
+  z-index: 0;
+}
+
+/*
+    Start Rating END
+ */
+
+/*# sourceMappingURL=main.css.map */

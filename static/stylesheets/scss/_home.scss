@@ -1,0 +1,59 @@
+@import "modules/variables";
+@import "modules/mixins";
+
+/*
+  Responsive blocks
+ */
+.home_page_books{
+    overflow: hidden;
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    margin: 1%;
+    border-radius: 10px;
+
+    @include desktop{
+        height: 230px;
+        width: 150px;
+    }
+
+    @include tablet{
+        height: 350px;
+        width: 230px;
+    }
+
+    @include smart-phones{
+        height: 250px;
+        width: 170px;
+    }
+
+    &:hover .book_block_img{
+        margin-top: -70px;
+    }
+}
+
+.book_block_img{
+    height: 100%;
+    width: 100%;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-bottom: 1px solid $border-color;
+    transition: all .5s ease;
+}
+
+.book_block_title{
+    font-family: $primary-font;
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 3%;
+}
+.book_block_info{
+    margin-top: -20px;
+    margin-left: 3%;
+    color: $text;
+    font-size: 12px;
+    font-family: $primary-font;
+}
+
+/*
+  Responsive blocks END
+*/

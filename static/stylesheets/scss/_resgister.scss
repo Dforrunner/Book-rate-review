@@ -1,0 +1,35 @@
+@import "modules/variables";
+@import "modules/mixins";
+
+//BOTH
+.form-container{
+  position: absolute;
+  background-color: $primary-color;
+  padding: 5%;
+
+  @include desktop{
+    $width: 40%;
+
+    width: $width;
+    left: 50%;
+    margin-left: -($width/2);
+  }
+
+  @include tablet{
+    width: 100%;
+    padding: 2% 20% 20% 20%;
+  }
+
+  @include smart-phones{
+    width: 100%;
+  }
+
+}
+
+//SING UP
+
+
+
+
+
+//SIGN IN

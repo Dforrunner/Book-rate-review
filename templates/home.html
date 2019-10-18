@@ -1,19 +1,17 @@
-{% extends "header.html" %}
+{% extends "index.html" %}
 {% block title %}Home{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
     <div class="row">
-        {% for book in books %}
-            <a class="home_page_books" href="{{ url_for('book_page', isbn=book.isbn, title=book.title, author=book.author, year=book.year)}}">
-                <img class="book_block_img" src="{{"http://covers.librarything.com/devkey/d90b4ba3c996ef48c8e7b1358d1452c8/large/isbn/" + book.isbn}}">
-
-
+        {% for book in books.items %}
+            <!-- book.image[7:] removes "http://" from the beginning of the link. This is added back in the book_page.html like so: "http://" + image_url -->
+            <a class="home_page_books" href="{{ url_for('book_page', isbn=book.isbn, title=book.title, author=book.author, year=book.year, image_url=book.image[7:])}}">
+                <img class="book_block_img" src="{{book.image}}">
                 <p class="text-dark book_block_title">{{ book.title }}</p>
-
                 <div class="book_block_info">
-                    <div class="star-ratings">
-                        <div class="star-ratings-top" style="width: {{ 3 }}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <div class="star-ratings-small">
+                        <div class="star-ratings-top" style="width: 100%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
                         <div class="star-ratings-bottom"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
                     </div>
                     <p>
@@ -24,5 +22,19 @@
             </a>
         {% endfor %}
     </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+             {% for page_num in books.iter_pages() %}
+                 {% if page_num %}
+                    <li class="page-item"><a class="page-link" href="{{url_for('home', page=page_num)}}">{{page_num}}</a></li>
+                 {% else %}
+                    <li class="page-item"><a class="page-link" href="#">...</a></li>
+                 {% endif %}
+             {% endfor %}
+        </ul>
+    </nav>
 </div>
 {% endblock %}
+
+

@@ -1,0 +1,50 @@
+@import "book_page";
+@import "home";
+@import "resgister";
+@import "modules/variables";
+@import "modules/mixins";
+
+p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
+    text-decoration: none !important;
+}
+
+#search-bar{
+    margin-right: 30%;
+}
+/*
+Start Rating
+ */
+.star-ratings-small {
+    unicode-bidi: bidi-override;
+    color: #4e504e;
+    font-size: 15px;
+    height: 15px;
+    width: 50px;
+    position: relative;
+    padding-bottom: 18px;
+}
+
+.star-ratings-large {
+    unicode-bidi: bidi-override;
+    color: rgba(91, 93, 91, 0.42);
+    font-size: 30px;
+    height: 20px;
+    width: 60px;
+    position: relative;
+    margin: -15px 0 15px 0;
+}
+.star-ratings-top {
+    color: gold;
+    position: absolute;
+    z-index: 1;
+    display:block;
+    overflow: hidden;
+    width: 0;
+}
+.star-ratings-bottom {
+    z-index: 0;
+}
+
+/*
+    Start Rating END
+ */

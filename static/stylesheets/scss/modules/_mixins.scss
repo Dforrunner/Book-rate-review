@@ -1,0 +1,38 @@
+/************************************************************************
+                                Media Queries
+**********************************************************************/
+@mixin smart-phones {
+  // Smart-phones (portrait and landscape)
+  @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+    @content
+  }
+}
+
+@mixin tablet {
+  // tablets (portrait and landscape)
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    @content
+  }
+}
+
+@mixin desktop {
+  // desktops
+  @media only screen and (min-device-width: 920px){
+    @content
+  }
+}
+
+@mixin largeDesktop {
+  // Large screen
+  @media only screen and (min-device-width: 1824px){
+    @content
+  }
+}
+/************************************************************************
+                                Media Queries END
+**********************************************************************/
+@mixin flex-center{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}

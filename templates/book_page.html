@@ -1,11 +1,19 @@
-{% extends "header.html" %}
+{% extends "index.html" %}
 {% block title %}Book Details{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="row">
             <div class="col-3">
-                <img class="img-fluid" src="{{image_url}}">
+                <img class="img-fluid" src="{{"https://" + image_url}}">
+            </div>
+            <h3 class="col-6">{{ title }}</h3>
+            <div class="col-5">
+                <div class="star-ratings-large">
+                <div class="star-ratings-top" style="width: {{ review_stat.percent_avg_rating|safe }}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                <div class="star-ratings-bottom"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+                </div>
+                <div>{{ review_stat.rating_count|safe }}</div>
             </div>
 
             <table class="table col-8">
@@ -17,14 +25,6 @@
                     <tr>
                       <th scope="row">ISBN13</th>
                       <td>{{ review_stat.isbn13|safe }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Total ratings</th>
-                      <td>{{ review_stat.rating_count|safe }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="col">Average rating</th>
-                      <td>{{ review_stat.avg_rating|safe }}</td>
                     </tr>
                     <tr>
                       <th scope="row">Total reviews</th>
