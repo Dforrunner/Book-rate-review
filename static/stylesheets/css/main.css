@@ -133,8 +133,23 @@ p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
   text-decoration: none !important;
 }
 
-#search-bar {
-  margin-right: 30%;
+@media only screen and (min-device-width: 920px) {
+  #search-bar {
+    margin-right: 18%;
+  }
+}
+@media only screen and (min-device-width: 920px) {
+  #search-bar > input {
+    width: 600px;
+  }
+}
+#search-bar > input:invalid {
+  box-shadow: none;
+}
+@media only screen and (min-device-width: 920px) {
+  #search-bar > button {
+    margin-left: -40px;
+  }
 }
 
 /*

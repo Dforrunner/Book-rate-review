@@ -1,18 +1,16 @@
-import os
 import csv
 import sys
 
 from flask import Flask
+from config import Config
 from db.models import *
-from book_cover_api import *
-from goodreads_api import get_avg_rating
+from third_party_api.book_cover_api import *
 
 '''
     Run this file to create the data and import the books from csv file into the database.
 '''
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config.from_object(Config)
 db.init_app(app)
 
 

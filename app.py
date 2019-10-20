@@ -1,22 +1,19 @@
-import requests
-import os
-from flask import Flask, session, render_template, request
-from flask_session import Session
-from sqlalchemy.orm import scoped_session, sessionmaker
-from flask_login import LoginManager, UserMixin
-from flask_wtf.csrf import CSRFProtect
-from goodreads_api import *
-from book_cover_api import *
-from db.models import *
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+# Flask Login
+from flask_login import LoginManager
+# Third party api module
+from third_party_api.goodreads_api import get_reviews, get_review_stats
+# Forms
+from forms.account_forms import SignInForm, SignUpForm, CSRFProtect
+# Models
+from db.models import Books
+# Config
+from config import Config
 
-# Check for environment variable
-if not os.getenv("DATABASE_URL"):
-    raise RuntimeError("DATABASE_URL is not set")
-
+db = SQLAlchemy()
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
+app.config.from_object(Config)
 db.init_app(app)
 
 # LOGIN
@@ -25,6 +22,9 @@ login_manager.init_app(app)
 
 # CSRF
 csrf = CSRFProtect(app)
+
+
+
 
 '''
 TODO:
@@ -46,20 +46,26 @@ def book_page(isbn, title, author, year, image_url):
 
 @app.route('/signin', methods=["GET", "POST"])
 def signin():
-    return render_template('register/signin.html')
+    form = SignInForm()
+    return render_template('register/signin.html', title="Sign In", form=form)
 
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
-    return render_template('register/signup.html')
+    form = SignUpForm()
+    return render_template('register/signup.html', title="Sign Up", form=form)
 
 
 @app.route('/search')
 def search():
     page = request.args.get('page', 1, type=int)
-    terms = request.args.get('query')
-    books = Books.query.filter("weights @@ to_tsquery(:terms)").params(terms=terms).paginate(page=page, per_page=21)
-    return render_template('home.html', books=books)
+    searched_terms = request.args.get('query').split()
+    if len(searched_terms) == 0:
+        return redirect(url_for('home'))
+    else:
+        queryable_terms = '&'.join(searched_terms)  # Postgres requires the & operator to search multiple terms
+        books = Books.query.filter("document @@ to_tsquery(:query)").params(query=queryable_terms).paginate(page=page, per_page=21)
+        return render_template('home.html', books=books)
 
 
 @app.route('/')

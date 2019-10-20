@@ -36,9 +36,11 @@
             <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0 " id="search-bar" method="GET" action="search">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" id="query">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <form class="form-inline" id="search-bar" method="GET" action="search">
+          <input class="form-control" type="search" placeholder="Search by title, author, isbn, year" aria-label="Search" name="query" required="true" oninvalid="this.setCustomValidity('Nothing to Search')" id="query">
+          <button  class="btn btn-default" type="submit">
+              <img alt="Search" width="20" src="{{ url_for('static', filename = "images/search.svg") }}">
+          </button>
         </form>
 
          <div class="btn-group btn-group-sm" role="group" aria-label="...">

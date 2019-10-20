@@ -3,38 +3,37 @@
 
 {% block body %}
         <div class="form-container">
-            <h3 align="center">Sign Up</h3>
-            <form>
-                {{ form.csrf_token }}
+            <h3 align="center">{{ title }}</h3>
+            <form method="POST">
                 <div class="form-group">
                     <div class="row">
                         <div class="col">
-                            <label for="firstNameInput">First name</label>
-                            <input type="text" class="form-control" id="firstNameInput" placeholder="First name">
+                            {{ form.firstname.label }}
+                            {{ form.firstname(class="form-control") }}
                         </div>
                         <div class="col">
-                            <label for="lastNameInput">Last name</label>
-                            <input type="text" class="form-control" id="lastNameInput" placeholder="Last name">
+                            {{ form.lastname.label }}
+                            {{ form.lastname(class="form-control") }}
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="usernameInput">Create a username</label>
-                    <input type="text" class="form-control" id="usernameInput" placeholder="Create a username">
+                    {{ form.username.label }}
+                    {{ form.username(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword2">Re-enter Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Re-enter password">
+                    {{ form.confirm.label }}
+                    {{ form.confirm(class="form-control") }}
                 </div>
-                <button type="submit" class="btn btn-primary">sign up</button>
+                {{ form.submit(class="btn btn-primary") }}
             </form>
         </div>
 

@@ -9,7 +9,24 @@ p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
 }
 
 #search-bar{
-    margin-right: 30%;
+    @include desktop{
+        margin-right: 18%;
+    }
+    > input {
+        @include desktop{
+            width: 600px;
+        }
+
+        &:invalid {
+            box-shadow: none;
+        }
+    }
+
+    >button{
+         @include desktop{
+             margin-left: -40px;
+        }
+    }
 }
 /*
 Start Rating
