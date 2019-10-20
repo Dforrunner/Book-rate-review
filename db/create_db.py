@@ -5,6 +5,7 @@ import sys
 from flask import Flask
 from db.models import *
 from book_cover_api import *
+from goodreads_api import get_avg_rating
 
 '''
     Run this file to create the data and import the books from csv file into the database.
@@ -33,9 +34,9 @@ def import_data():
 
 
 def main():
-    # print("Creating database in progress...")
-    # db.create_all()
-    # print("Database created successfully!")
+    print("Creating database in progress...")
+    db.create_all()
+    print("Database created successfully!")
     print("\nImporting csv into database in progress...")
     import_data()
     print("\nCompleted successfully!")

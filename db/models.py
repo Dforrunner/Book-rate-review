@@ -1,10 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-
 class Books(db.Model):
     __tablename__ = "books"
+
     id = db.Column(db.Integer, primary_key=True)
     isbn = db.Column(db.String, nullable=False, unique=True)
     title = db.Column(db.String, nullable=False)
@@ -13,7 +14,7 @@ class Books(db.Model):
     image = db.Column(db.String, nullable=True)
 
 
-class Users(db.Model):
+class Users(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, nullable=False, unique=True)
