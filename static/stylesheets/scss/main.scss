@@ -10,7 +10,7 @@ p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
 
 #search-bar{
     @include desktop{
-        margin-right: 18%;
+        margin-right: 15%;
     }
     > input {
         @include desktop{

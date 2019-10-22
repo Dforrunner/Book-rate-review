@@ -1,7 +1,7 @@
 @import "modules/variables";
 @import "modules/mixins";
 
-//BOTH
+// Form Containers
 .form-container{
   position: absolute;
   background-color: $primary-color;
@@ -23,13 +23,17 @@
   @include smart-phones{
     width: 100%;
   }
-
 }
 
-//SING UP
+// Form message color
+.red_msg{
+  color: red;
+}
 
+// Form field error message
+.field_errors_msg{
+  font-family: $primary-font;
+  font-size: 12px;
+  color: rgba(99, 0, 0, 0.84);
+}
 
-
-
-
-//SIGN IN

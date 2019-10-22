@@ -43,10 +43,18 @@
           </button>
         </form>
 
+
+        {% if current_user.is_authenticated %}
+            <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <a class="btn btn-primary" href="{{ url_for('user_profile', username=current_user.username) }}">{{current_user.username}}'s profile</a>
+            <a class="btn btn-secondary" href="{{ url_for('signout') }}">sign out</a>
+        </div>
+        {% else %}
          <div class="btn-group btn-group-sm" role="group" aria-label="...">
             <a class="btn btn-primary" href="{{ url_for('signin') }}">sign in</a>
             <a class="btn btn-secondary" href="{{ url_for('signup') }}">sign up</a>
         </div>
+        {% endif %}
     </div>
 
 </nav>

@@ -117,6 +117,16 @@
   }
 }
 
+.red_msg {
+  color: red;
+}
+
+.field_errors_msg {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: rgba(99, 0, 0, 0.84);
+}
+
 /************************************************************************
                                   Colors
 **********************************************************************/
@@ -135,7 +145,7 @@ p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
 
 @media only screen and (min-device-width: 920px) {
   #search-bar {
-    margin-right: 18%;
+    margin-right: 15%;
   }
 }
 @media only screen and (min-device-width: 920px) {
