@@ -13,6 +13,7 @@ class Config(object):
     WTF_CSRF_ENABLED = True
     DEBUG_TB_ENABLED = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
+    USE_SESSION_FOR_NEXT = True
 
     # mail settings
     MAIL_SERVER = 'smtp.googlemail.com'
@@ -26,3 +27,10 @@ class Config(object):
 
     # mail accounts
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+
+    # Todo: update allowed host before launch
+    # Allowed hosts
+    ALLOWED_HOSTS = '127.0.0.1'
+
+    # Pagination
+    POSTS_PER_PAGE = 21

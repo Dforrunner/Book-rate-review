@@ -15,6 +15,7 @@ class Books(db.Model):
     author = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer)
     image = db.Column(db.String, nullable=True)
+    document = db.Column(db.String)
 
 
 class User(UserMixin, db.Model):

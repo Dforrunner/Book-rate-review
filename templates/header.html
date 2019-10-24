@@ -24,7 +24,7 @@
         {% if current_user.is_authenticated %}
             <div class="btn-group btn-group-sm " role="group" aria-label="...">
             {% if current_user.confirmed %}
-                <a class="btn btn-primary" href="{{ url_for('user_profile', username=current_user.username) }}">{{current_user.username}}'s profile</a>
+                <a class="btn btn-primary" href="{{ url_for('user_profile', username=current_user.username) }}">Profile</a>
             {% else %}
                 <a class="btn btn-primary" href="{{ url_for('unconfirmed') }}"> Confirm</a>
             {% endif %}

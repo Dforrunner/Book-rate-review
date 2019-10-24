@@ -1,7 +1,7 @@
 import datetime
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from is_safe_url import is_safe_url
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
-
 # Flask Login
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 # Third party api module
@@ -43,7 +43,6 @@ def load_user(user_id):
 def user_profile(username):
     if not current_user.is_authenticated or (current_user.id == 0):
         user_not_signed_in()
-
     return render_template("user_account/profile.html", user=current_user)
 
 
@@ -52,46 +51,9 @@ def redirect_to_profile():
     return redirect(url_for('user_profile', username=current_user.username))
 
 
-@app.route('/signin', methods=["GET", "POST"])
-def signin():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-
-    form = SignInForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            user = User.query.filter_by(email=form.email.data).first()
-            if user is None or not user.check_password(salt_pass(form.password.data)):
-                return render_template("user_account/signin.html", form=form, message_bottom="Invalid username or password")
-
-            # Load user if user authorized
-            login_user(user, remember=form.remember_me.data)
-
-            return redirect_to_profile()
-
-    return render_template('user_account/signin.html', form=form)
-
-
-@login_manager.unauthorized_handler
-def user_not_signed_in():
-    flash('Sign in required.', 'warning')
-    return redirect(url_for('signin'))
-
-
-@app.route('/signout')
-def signout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
-def salt_pass(pw):
-    return pw + app.config['SECURITY_PASSWORD_SALT']
-
-
 @app.route('/confirm/<token>')
 @login_required
 def confirm_email(token):
-
     try:
         email = confirm_token(token)
     except:
@@ -99,7 +61,7 @@ def confirm_email(token):
 
     user = db.session.query(User).filter_by(email=email).first_or_404()
     if user.confirmed:
-        flash('Account already confirmed. Please login.', 'success')
+        flash('Account already confirmed.', 'success')
     else:
         user.confirmed = True
         user.confirmed_on = datetime.datetime.now()
@@ -127,6 +89,48 @@ def resend_confirmation():
     send_email(current_user.email, subject, html)
     flash('A new confirmation email has been sent.', 'success')
     return redirect(url_for('unconfirmed'))
+
+
+@app.route('/signin', methods=["GET", "POST"])
+def signin():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+
+    form = SignInForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user is None or not user.check_password(salt_pass(form.password.data)):
+                return render_template("user_account/signin.html", form=form, message_bottom="Invalid username or password")
+
+            # Load user if user authorized
+            login_user(user, remember=form.remember_me.data)
+            next_url = request.args.get('next')
+
+            if is_safe_url(next_url, allowed_hosts=app.config['ALLOWED_HOSTS']):
+                abort(400)
+
+            return redirect(next_url or redirect_to_profile())
+
+    return render_template('user_account/signin.html', form=form)
+
+
+@login_manager.unauthorized_handler
+def user_not_signed_in():
+    flash('Sign in required.', 'info')
+    next_url = request.url
+    login_url = '%s?next=%s' % (url_for('signin'), next_url)
+    return redirect(login_url)
+
+
+@app.route('/signout')
+def signout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+def salt_pass(pw):
+    return pw + app.config['SECURITY_PASSWORD_SALT']
 
 
 @app.route('/signup', methods=["GET", "POST"])
@@ -183,7 +187,7 @@ def search():
         return redirect(url_for('home'))
     else:
         queryable_terms = '&'.join(searched_terms)  # Postgres requires the & operator to search multiple terms
-        books = Books.query.filter("document @@ to_tsquery(:query)").params(query=queryable_terms).paginate(page=page, per_page=21)
+        books = db.session.query(Books).filter(Books.document.op('@@')(db.func.to_tsquery(queryable_terms))).paginate(page=page, per_page=21)
         return render_template('home.html', books=books)
 
 
@@ -191,8 +195,13 @@ def search():
 @app.route('/home')
 def home():
     page = request.args.get('page', 1, type=int)
-    books = Books.query.paginate(page=page, per_page=21)
-    return render_template("home.html", books=books)
+    books = Books.query.paginate(page=page, per_page=app.config['POSTS_PER_PAGE'])
+
+    next_url = url_for('home', page=books.next_num) \
+        if books.has_next else None
+    prev_url = url_for('home', page=books.prev_num) \
+        if books.has_prev else None
+    return render_template("home.html", books=books, next_url=next_url, prev_url=prev_url)
 
 
 if __name__ == '__main__':
