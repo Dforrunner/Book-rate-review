@@ -5,70 +5,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.3.1-dist/css/bootstrap.min.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Animate css from https://daneden.github.io/animate.css/ -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/animate.css') }}">
-
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.css') }}">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='MDBootstrap/css/bootstrap.min.css') }}">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='MDBootstrap/css/mdb.min.css') }}">
     <!-- My CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/main.css')}}">
 
-
     <title>{% block title %}{% endblock %}</title>
 
-
-    {% block header %}{% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('home') }}">
-        <img src="{{ url_for('static', filename='images/LOGO.png') }}" width="auto" height="50" class="d-inline-block align-top" alt="">
-    </a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-        <form class="form-inline" id="search-bar" method="GET" action="search">
-          <input class="form-control" type="search" placeholder="Search by title, author, isbn, year" aria-label="Search" name="query" required="true" oninvalid="this.setCustomValidity('Nothing to Search')" id="query">
-          <button  class="btn btn-default" type="submit">
-              <img alt="Search" width="20" src="{{ url_for('static', filename = "images/search.svg") }}">
-          </button>
-        </form>
+    {% include 'flash_msg.html' %}
+    {% include 'header.html' %}
+    {% block body %}{% endblock %}
+    {% include 'footer.html' %}
 
 
-        {% if current_user.is_authenticated %}
-            <div class="btn-group btn-group-sm" role="group" aria-label="...">
-            <a class="btn btn-primary" href="{{ url_for('user_profile', username=current_user.username) }}">{{current_user.username}}'s profile</a>
-            <a class="btn btn-secondary" href="{{ url_for('signout') }}">sign out</a>
-        </div>
-        {% else %}
-         <div class="btn-group btn-group-sm" role="group" aria-label="...">
-            <a class="btn btn-primary" href="{{ url_for('signin') }}">sign in</a>
-            <a class="btn btn-secondary" href="{{ url_for('signup') }}">sign up</a>
-        </div>
-        {% endif %}
-    </div>
-
-</nav>
-
-{% block body %}
-{% endblock %}
-
-<!-- Bootstrap Scripts -->
-<script src="{{ url_for('static', filename='bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ url_for('static', filename='bootstrap-4.3.1-dist/js/bootstrap.min.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-{% block scripts %}
-{% endblock %}
+    <!-- JQuery -->
+    <script type="text/javascript" src="{{ url_for('static', filename='MDBootstrap/js/jquery-3.4.1.min.js') }}"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{{ url_for('static', filename='MDBootstrap/js/popper.min.js') }}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{{ url_for('static', filename='MDBootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{{ url_for('static', filename='MDBootstrap/js/mdb.min.js') }}"></script>
+    <!-- Flask Flash Jquery Script -->
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/flash_msg.js') }}"></script>
 
 </body>
 </html>

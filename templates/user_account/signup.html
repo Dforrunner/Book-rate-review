@@ -2,70 +2,51 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block body %}
-        <div class="form-container">
-            <h3 align="center">Sign Up</h3>
-            <form method="POST">
-                {{ form.csrf_token }}
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col">
-                            {{ form.firstname.label }}
-                            {{ form.firstname(class="form-control") }}
-                            <ul>
-                                {% for error in form.firstname.errors %}
-                                    <li class="field_errors_msg">{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col">
-                            {{ form.lastname.label }}
-                            {{ form.lastname(class="form-control") }}
-                            <ul>
-                                {% for error in form.lastname.errors %}
-                                    <li class="field_errors_msg">{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    {{ form.username.label }}
-                    {{ form.username(class="form-control") }}
-                    <ul>
-                        {% for error in form.username.errors %}
-                            <li class="field_errors_msg">{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="form-group">
-                    {{ form.email.label }}
-                    {{ form.email(class="form-control") }}
-                    <ul>
-                        {% for error in form.email.errors %}
-                            {% if loop.index == 1 %}
-                                <li class="field_errors_msg">{{ error }}</li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
 
-                </div>
-                <div class="form-group">
-                    {{ form.password.label }}
-                    {{ form.password(class="form-control") }}
-                    <ul>
-                        {% for error in form.password.errors %}
+<div class="min-vh-100">
+    <div class=" form-container animated bounceInDown">
+        <p class="h4 mb-4 text-center">Sign Up</p>
+        <form method="POST">
+            {{ form.csrf_token }}
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username(class="form-control") }}
+                <ul>
+                    {% for error in form.username.errors %}
+                        <li class="field_errors_msg">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{ form.email(class="form-control") }}
+                <ul>
+                    {% for error in form.email.errors %}
+                        {% if loop.index == 1 %}
                             <li class="field_errors_msg">{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="form-group">
-                    {{ form.confirm.label }}
-                    {{ form.confirm(class="form-control") }}
-                </div>
-                {{ form.submit(class="btn btn-primary") }}
-            </form>
-        </div>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
 
+            </div>
+            <div class="form-group">
+                {{ form.password(class="form-control") }}
+                 <small class="form-text text-muted mb-4">
+                    Must be 8-25 characters and include 1 digit, 1 uppercase letter, 1 lowercase letter, and 1 special character (!@#$%^&*-_)
+                 </small>
+                <ul>
+                    {% for error in form.password.errors %}
+                        <li class="field_errors_msg">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-group">
+                {{ form.confirm(class="form-control") }}
+            </div>
+            <div class="text-center">
+                {{ form.submit(class="btn btn-info submit-btn") }}
+            </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+import datetime
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from is_safe_url import is_safe_url
+
 # Flask Login
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 # Third party api module
@@ -8,9 +9,13 @@ from third_party_api.goodreads_api import get_reviews, get_review_stats
 # Forms
 from forms.account_forms import SignInForm, SignUpForm, CSRFProtect
 # Models
-from db.models import Books, Users
+from db.models import Books, User
 # Config
 from config import Config
+# Utils
+from util.token import generate_confirmation_token, confirm_token
+from util.email import send_email
+from util.decorators import check_confirmed
 
 db = SQLAlchemy()
 app = Flask(__name__)
@@ -29,17 +34,22 @@ csrf = CSRFProtect(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Users.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
 
 @app.route('/profile/<string:username>')
 @login_required
+@check_confirmed
 def user_profile(username):
     if not current_user.is_authenticated or (current_user.id == 0):
         user_not_signed_in()
 
-    user = Users.query.get(current_user.id)
-    return render_template("user_account/profile.html", user=user)
+    return render_template("user_account/profile.html", user=current_user)
+
+
+# Helper method to redirect users to their profile if they are already logged in
+def redirect_to_profile():
+    return redirect(url_for('user_profile', username=current_user.username))
 
 
 @app.route('/signin', methods=["GET", "POST"])
@@ -50,22 +60,22 @@ def signin():
     form = SignInForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            user = Users.query.filter_by(email=form.email.data).first()
-            if user is None or not user.check_password(form.password.data):
+            user = User.query.filter_by(email=form.email.data).first()
+            if user is None or not user.check_password(salt_pass(form.password.data)):
                 return render_template("user_account/signin.html", form=form, message_bottom="Invalid username or password")
 
             # Load user if user authorized
             login_user(user, remember=form.remember_me.data)
 
-            return redirect(url_for('user_profile', username=current_user.username))
+            return redirect_to_profile()
 
     return render_template('user_account/signin.html', form=form)
 
 
 @login_manager.unauthorized_handler
 def user_not_signed_in():
-    form = SignInForm()
-    return render_template("user_account/signin.html", form=form, message_top="*Sign in first.")
+    flash('Sign in required.', 'warning')
+    return redirect(url_for('signin'))
 
 
 @app.route('/signout')
@@ -74,23 +84,81 @@ def signout():
     return redirect(url_for('home'))
 
 
+def salt_pass(pw):
+    return pw + app.config['SECURITY_PASSWORD_SALT']
+
+
+@app.route('/confirm/<token>')
+@login_required
+def confirm_email(token):
+
+    try:
+        email = confirm_token(token)
+    except:
+        flash('The confirmation link is invalid or has expired.', 'danger')
+
+    user = db.session.query(User).filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Account already confirmed. Please login.', 'success')
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.datetime.now()
+        db.session.commit()
+        flash('You have confirmed your account. Thanks!', 'success')
+    return redirect(url_for('home'))
+
+
+@app.route('/unconfirmed')
+@login_required
+def unconfirmed():
+    if current_user.confirmed:
+        return redirect('main.home')
+    flash('Please confirm your account! (check email inbox and spam). ', 'warning')
+    return render_template('user_account/account_activation/unconfirmed.html')
+
+
+@app.route('/resend')
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    confirm_url = url_for('confirm_email', token=token, _external=True)
+    html = render_template('user_account/account_activation/confirmation_email.html', confirm_url=confirm_url, username=current_user.username)
+    subject = "Book R&R Email Confirmation"
+    send_email(current_user.email, subject, html)
+    flash('A new confirmation email has been sent.', 'success')
+    return redirect(url_for('unconfirmed'))
+
+
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
+    if current_user.is_authenticated:
+        return redirect_to_profile()
+
     form = SignUpForm()
     if form.validate_on_submit():
         # Create user and add to database
-        user = Users(first_name=form.firstname.data,
-                     last_name=form.lastname.data,
-                     email=form.email.data,
-                     username=form.username.data)
-        user.set_password(form.password.data)
+        user = User(email=form.email.data,
+                    username=form.username.data,
+                    password=salt_pass(form.password.data),
+                    confirmed=False)
+
         db.session.add(user)
         db.session.commit()
 
-        # Once user has created an account log them in
-        login_user(user)
+        # User Activation
+        token = generate_confirmation_token(user.email)
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        html = render_template('user_account/account_activation/confirmation_email.html', confirm_url=confirm_url, username=user.username)
+        subject = "Book R&R Email Confirmation"
+        send_email(user.email, subject, html)
 
-        return redirect(url_for('user_profile', username=form.username.data))
+        # Once user has created an account and authenticated successfully log them in
+        # Otherwise if they are not authenticated redirect them to sign in page
+        login_user(user)
+        if current_user.is_authenticated:
+            return redirect(url_for("unconfirmed"))
+        else:
+            return redirect(url_for('signin'))
 
     return render_template('user_account/signup.html', form=form)
 
