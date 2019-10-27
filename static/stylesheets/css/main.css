@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /************************************************************************
                                   Colors
 **********************************************************************/
@@ -133,10 +134,6 @@
   width: 360px;
 }
 
-.form-viewport {
-  height: 100vh;
-}
-
 .red_msg {
   color: red;
 }
@@ -145,6 +142,98 @@
   font-family: Arial, sans-serif;
   font-size: 12px;
   color: rgba(99, 0, 0, 0.84);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.rate {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+}
+
+.rate:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+}
+
+.rate:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 30px;
+  color: #ccc;
+}
+
+.rate:not(:checked) > label:before {
+  content: "★ ";
+}
+
+.rate > input:checked ~ label {
+  color: #ffc700;
+}
+
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: #deb217;
+}
+
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+
+#goodreads-widget {
+  font-family: georgia, serif;
+  padding: 18px 0;
+  width: 100% !important;
+}
+
+#goodreads-widget h1 {
+  font-weight: normal;
+  font-size: 16px;
+  border-bottom: 1px solid #BBB596;
+  margin-bottom: 0;
+}
+
+#goodreads-widget a {
+  text-decoration: none;
+  color: #660;
+}
+
+#the_iframe {
+  background-color: #fff;
+  width: 100% !important;
+  height: 1000px !important;
+}
+
+#goodreads-widget a:hover {
+  text-decoration: underline;
+}
+
+#goodreads-widget a:active {
+  color: #660;
+}
+
+#gr_footer {
+  width: 100%;
+  border-top: 1px solid #BBB596;
+  text-align: right;
+}
+
+#goodreads-widget .gr_branding {
+  color: #382110;
+  font-size: 11px;
+  text-decoration: none;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /************************************************************************

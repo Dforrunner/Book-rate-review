@@ -21,7 +21,9 @@
 
     {% include 'flash_msg.html' %}
     {% include 'header.html' %}
-    {% block body %}{% endblock %}
+    <div class="min-vh-100">
+        {% block body %}{% endblock %}
+    </div>
     {% include 'footer.html' %}
 
 

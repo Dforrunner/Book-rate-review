@@ -31,7 +31,7 @@ login_manager.refresh_view = 'signin'
 # CSRF
 csrf = CSRFProtect(app)
 
-
+"""************************ User Authentication ***************************************"""
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -167,6 +167,9 @@ def signup():
     return render_template('user_account/signup.html', form=form)
 
 
+"""************************ User Authentication END ***************************************"""
+
+
 @app.route('/book_page/<string:title>/<string:author>/<string:year>/<string:isbn>/<path:image_url>')
 def book_page(isbn, title, author, year, image_url):
     return render_template("book_page.html",
@@ -179,16 +182,26 @@ def book_page(isbn, title, author, year, image_url):
                            )
 
 
+@app.route('/rate-and-review')
+def add_review():
+    return render_template('add_review.html')
+
+
 @app.route('/search')
 def search():
     page = request.args.get('page', 1, type=int)
+    # split the searched terms into a list
     searched_terms = request.args.get('query').split()
+    # if nothing searched redirect to homepage
     if len(searched_terms) == 0:
         return redirect(url_for('home'))
     else:
         queryable_terms = '&'.join(searched_terms)  # Postgres requires the & operator to search multiple terms
         books = db.session.query(Books).filter(Books.document.op('@@')(db.func.to_tsquery(queryable_terms))).paginate(page=page, per_page=21)
-        return render_template('home.html', books=books)
+        message = ''
+        if len(books.items) == 0:
+            message = 'No search results found.'
+        return render_template('home.html', books=books, message=message)
 
 
 @app.route('/')

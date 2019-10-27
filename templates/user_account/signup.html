@@ -44,6 +44,9 @@
             </div>
             <div class="text-center">
                 {{ form.submit(class="btn btn-info submit-btn") }}
+                <p class="mt-3">Already a member?
+                    <a href="{{ url_for('signin') }}">Sign In</a>
+                </p>
             </div>
         </form>
     </div>

@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block title %}Rate & Review{% endblock %}
+
+{% block body %}
+<div class="p-5">
+    <div class="row">
+    Rate:
+       {% include 'star_rating.html' %}
+    </div>
+
+    <div class="form-group shadow-textarea">
+        <label for="reviewTextarea">Leave a review</label>
+        <textarea class="form-control z-depth-1" id="reviewTextarea" rows="3" placeholder="Write something here..."></textarea>
+    </div>
+</div>
+
+{% endblock %}

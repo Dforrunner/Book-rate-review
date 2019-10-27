@@ -88,3 +88,8 @@ def get_avg_rating(isbn):
         print("Error getting avg rating")
 
     return percent_avg_rating
+
+
+def create_review(book_id):
+    # TODO: implement this method
+    print('')
