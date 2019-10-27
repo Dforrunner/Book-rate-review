@@ -3,4 +3,8 @@ Pillow
 Flask
 Flask-Session
 psycopg2-binary
-SQLAlchemy
+Flask-Login
+Flask-Mail
+Flask-SQLAlchemy
+Flask-WTF
+requests
