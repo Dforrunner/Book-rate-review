@@ -6,7 +6,7 @@
         <button type="button" class="close m-0 p-1" data-dismiss="alert" id="close-flash-btn">&times;</button>
         {{ message }}
         {% if category == 'warning' %}
-            <span>Didn't get the email? <a href="{{ url_for('resend_confirmation') }}">Resend</a>.</span>
+            <span>Didn't get the email? <a href="{{ url_for('account.resend_confirmation') }}">Resend</a>.</span>
         {% endif %}
        </div>
     {% endfor %}

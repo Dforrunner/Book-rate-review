@@ -1,3 +1,4 @@
+wtforms
 requests
 Pillow
 Flask
@@ -7,4 +8,5 @@ Flask-Login
 Flask-Mail
 Flask-SQLAlchemy
 Flask-WTF
-requests
+flask-bcrypt
+

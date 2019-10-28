@@ -1,9 +1,5 @@
-from flask import Flask
-from config import Config
+from flask import current_app as app
 from itsdangerous import URLSafeTimedSerializer
-
-app = Flask(__name__)
-app.config.from_object(Config)
 
 
 def generate_confirmation_token(email):

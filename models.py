@@ -1,9 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
-
-db = SQLAlchemy()
+from ext import bcrypt, db
 
 
 class Books(db.Model):
@@ -31,7 +28,10 @@ class User(UserMixin, db.Model):
     book_shelf = db.Column(db.Integer, db.ForeignKey("books.id"), nullable=True)
 
     def check_password(self, pw):
-        return check_password_hash(self.password, pw)
+        return bcrypt.check_password_hash(self.password, pw)
+
+    def set_password(self, pw):
+        self.password = bcrypt.generate_password_hash(pw)
 
     def add_book(self, book):
         self.book_shelf.append_foreign_key(book)
@@ -42,7 +42,7 @@ class User(UserMixin, db.Model):
     def __init__(self, email, username, password, confirmed, confirmed_on=None, **kwargs):
         self.username = username
         self.email = email
-        self.password = generate_password_hash(password)
+        self.password = bcrypt.generate_password_hash(password)
         self.registered_on = datetime.datetime.now()
         self.confirmed = confirmed
         self.confirmed_on = confirmed_on

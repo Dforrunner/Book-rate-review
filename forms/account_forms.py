@@ -1,10 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Email, InputRequired, EqualTo, Length, Regexp, ValidationError
-from flask_wtf.csrf import CSRFProtect
+from wtforms.validators import DataRequired, Email, InputRequired, EqualTo, Length, Regexp
 
-from util.validators import Unique
-from db.models import User
+from util.validators import Unique, ValidUser, ValidOldPass
+from models import User
 
 
 class SignUpForm(FlaskForm):
@@ -55,3 +54,51 @@ class SignInForm(FlaskForm):
 
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+
+# Form to reset forgotten password
+class PassResetEmailForm(FlaskForm):
+    email = StringField('Email',
+                        validators=[
+                            DataRequired(),
+                            Email(),
+                            ValidUser(User, User.email, message='There is no account associated to the given email.')
+                        ],
+                        render_kw={'placeholder': 'E-mail'})
+    submit = SubmitField('Reset Password')
+
+
+class PassResetForm(FlaskForm):
+    password = PasswordField('Create Password',
+                             validators=[
+                                 InputRequired(),
+                                 EqualTo('confirm', message='Passwords must match'),
+                                 Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-_]).+', message="Password must contain at least: 1 lowercase letter, 1 uppercase letter, 1 number, and special character (!@#$%^&*-_)"),
+                                 Length(min=8, max=25, message="Password must be between 8 & 25 characters")
+                             ],
+                             render_kw={'placeholder': 'Password'})
+
+    confirm = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm password'})
+    submit = SubmitField('Reset Password')
+
+
+# Form to change password given that you know the old password
+class ChangePassForm(FlaskForm):
+    old_password = PasswordField('Old Password',
+                             validators=[
+                                 InputRequired(),
+                             ],
+                             render_kw={'placeholder': 'Password'})
+
+    password = PasswordField('Create Password',
+                             validators=[
+                                 InputRequired(),
+                                 EqualTo('confirm', message='Passwords must match'),
+                                 Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-_]).+', message="Password must contain at least: 1 lowercase letter, 1 uppercase letter, 1 number, and special character (!@#$%^&*-_)"),
+                                 Length(min=8, max=25, message="Password must be between 8 & 25 characters")
+                             ],
+                             render_kw={'placeholder': 'Password'})
+
+    confirm = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm password'})
+    submit = SubmitField('Change Password')
+

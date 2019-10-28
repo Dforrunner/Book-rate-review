@@ -1,17 +1,13 @@
 import csv
 import sys
-
-from flask import Flask
-from config import Config
-from db.models import *
-from third_party_api.book_cover_api import *
+from flask import current_app as app
+from models import Books
+from ext import db
+from third_party_api.book_cover_api import get_cover_image_url
 
 '''
     Run this file to create the data and import the books from csv file into the database.
 '''
-app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
 
 
 def import_data():
@@ -41,5 +37,6 @@ def main():
 
 
 if __name__ == "__main__":
-    with app.app_context():
+    with app.app_contect():
         main()
+
