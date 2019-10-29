@@ -102,3 +102,5 @@ class ChangePassForm(FlaskForm):
     confirm = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm password'})
     submit = SubmitField('Change Password')
 
+
+

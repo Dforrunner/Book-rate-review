@@ -1,5 +1,6 @@
 from wtforms.validators import ValidationError
 
+
 class Unique(object):
 
     def __init__(self, model, field, message=u'This element already exists.'):

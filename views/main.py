@@ -16,7 +16,7 @@ def search():
         return redirect(url_for('home'))
     else:
         queryable_terms = '&'.join(searched_terms)  # Postgres requires the & operator to search multiple terms
-        books = db.session.query(Books).filter(Books.document.op('@@')(db.func.to_tsquery(queryable_terms))).paginate(page=page, per_page=21)
+        books = db.session.query(Books).filter(Books.document.op('@@')(db.func.to_tsquery(queryable_terms))).paginate(page=page, per_page=app.config['POSTS_PER_HOME_PAGE'])
         message = ''
         if len(books.items) == 0:
             message = 'No search results found.'
@@ -27,7 +27,7 @@ def search():
 @main.route('/home')
 def home():
     page = request.args.get('page', 1, type=int)
-    books = Books.query.paginate(page=page, per_page=app.config['POSTS_PER_PAGE'])
+    books = Books.query.paginate(page=page, per_page=app.config['POSTS_PER_HOME_PAGE'])
 
     next_url = url_for('main.home', page=books.next_num) \
         if books.has_next else None

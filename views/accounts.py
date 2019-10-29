@@ -9,6 +9,7 @@ from forms.account_forms import SignInForm, SignUpForm, PassResetEmailForm, Pass
 # Utils
 from util.token import generate_confirmation_token, confirm_token
 from util.email import send_email
+from util.validators import ValidUser
 # User model
 from models import User
 
@@ -39,11 +40,7 @@ def validate_email_verification_url(token):
 
 # Helper method to redirect users to their profile if they are already logged in
 def redirect_to_profile():
-    return redirect(url_for('user.user_profile', username=current_user.username))
-
-
-def salt_pass(pw):
-    return pw + app.config['SECURITY_PASSWORD_SALT']
+    return url_for('user.user_profile', username=current_user.username)
 
 
 @account.route('/signout')
@@ -62,7 +59,7 @@ def signup():
         # Create user and add to database
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password=salt_pass(form.password.data),
+                    password=form.password.data,
                     confirmed=False)
 
         db.session.add(user)
@@ -95,7 +92,7 @@ def signin():
     if request.method == 'POST':
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
-            if user is None or not user.check_password(salt_pass(form.password.data)):
+            if user is None or not user.check_password(form.password.data):
                 return render_template("user_account/signin.html", form=form, message_bottom="Invalid username or password")
 
             # Load user if user authorized
@@ -177,7 +174,7 @@ def confirm_pass_reset_url(token):
         form = PassResetForm()
         if request.method == 'POST':
             if form.validate_on_submit():
-                user.set_password(salt_pass(form.password.data))
+                user.set_password(form.password.data)
                 db.session.commit()
                 flash('You successfully changed your password. Try signing in now.', 'success')
                 return redirect(url_for('account.signin'))
@@ -190,8 +187,10 @@ def confirm_pass_reset_url(token):
 def change_password():
     form = ChangePassForm()
     if request.method == 'POST':
+        # Validate user's current password
+        ValidUser(current_user, current_user.check_password(pw=form.old_password.data), message="The old password is incorrect.")
         if form.validate_on_submit():
-            current_user.set_password(salt_pass(form.password.data))
+            current_user.set_password(form.password.data)
             db.session.commit()
             flash('You successfully changed your password.', 'success')
     return

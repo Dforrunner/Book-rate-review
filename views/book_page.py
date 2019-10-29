@@ -1,12 +1,23 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, request, render_template, redirect, url_for
+from flask_login import current_user
 from third_party_api.goodreads_api import get_reviews, get_review_stats
+from models import Books
+from ext import db
 
 book_pg = Blueprint('book_pg', __name__)
 
 
-@book_pg.route('/book_page/<string:title>/<string:author>/<string:year>/<string:isbn>/<path:image_url>')
-def book_page(isbn, title, author, year, image_url):
+# Helper function to redirect to previous page.
+def redirect_url(default='user.user_profile'):
+    return request.args.get('next') or \
+           request.referrer or \
+           url_for(default)
+
+
+@book_pg.route('/book_page/<int:book_id>/<string:title>/<string:author>/<string:year>/<string:isbn>/<path:image_url>')
+def book_page(book_id, isbn, title, author, year, image_url):
     return render_template("book_page.html",
+                           book_id=book_id,
                            review_widget=get_reviews(isbn),
                            image_url=image_url,
                            review_stat=get_review_stats(isbn),
@@ -14,6 +25,14 @@ def book_page(isbn, title, author, year, image_url):
                            author=author,
                            year=year
                            )
+
+
+@book_pg.route('/<int:book_id>')
+def add_to_bookshelf(book_id):
+    book = Books.query.get(book_id)
+    current_user.add_book(book)
+    db.session.commit()
+    return redirect(redirect_url())
 
 
 @book_pg.route('/rate-and-review')

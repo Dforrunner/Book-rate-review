@@ -1,0 +1,11 @@
+@import "modules/variables";
+@import "modules/mixins";
+
+.left-panel{
+  background-color: $secondary-color;
+}
+
+.profile-header{
+  background-color: #a0a0a0;
+  height: 10%;
+}

@@ -33,4 +33,5 @@ class Config(object):
     ALLOWED_HOSTS = '127.0.0.1'
 
     # Pagination
-    POSTS_PER_PAGE = 21
+    POSTS_PER_HOME_PAGE = 21
+    POSTS_PER_PROFILE_PAGE = 18
