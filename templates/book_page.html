@@ -24,14 +24,15 @@
                         <a class="btn btn-elegant" href="{{ url_for('book_pg.add_review') }}">Review & Rate</a>
                         <a class="btn btn-danger" href="{{ url_for('book_pg.add_to_bookshelf', book_id=book_id) }}">Add to bookshelf</a>
                     {% else %}
-                        <!-- TODO: make prettier alerts -->
-                        <a class="btn btn-elegant" onclick="alert('Confirmation Required.')">Review & Rate</a>
-                        <a class="btn btn-danger" onclick="alert('Confirmation Required.')">Add to bookshelf</a>
+                        <button class="btn btn-elegant" type="button" data-toggle="modal" data-target="#confirmationReqModal">Review & Rate</button>
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#confirmationReqModal">Add to bookshelf</button>
+                        {% include 'bootstrapModals/e_conf_req_modal.html' %}
+
                     {% endif %}
                 {% else %}
-                    <!-- TODO: make prettier alerts -->
-                    <a class="btn btn-elegant" onclick="alert('Sign In Required.')">Review & Rate</a>
-                    <a class="btn btn-danger" onclick="alert('Sign In Required.')">Add to bookshelf</a>
+                    <button class="btn btn-elegant" type="button" data-toggle="modal" data-target="#signinReqModal">Review & Rate</button>
+                    <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#signinReqModal">Add to bookshelf</button>
+                    {% include 'bootstrapModals/signin_required_modal.html' %}
 
                 {% endif %}
                 <table class="table">

@@ -1,0 +1,30 @@
+{% extends 'user_account/settings.html' %}
+{% block settings %}
+<div class="form-container rounded mt-5">
+    <p class="h4 mb-4 text-center">Change Username</p>
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.username(class="form-control") }}
+            <ul>
+                {% for error in form.username.errors %}
+                    <li class="field_errors_msg ml-3">{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="form-group">
+            {{ form.current_password(class="form-control") }}
+            <ul>
+                {% for error in form.current_password.errors %}
+                    <li class="field_errors_msg ml-3">{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="text-center">
+            {{ form.submit(class="btn btn-info shadow-none") }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

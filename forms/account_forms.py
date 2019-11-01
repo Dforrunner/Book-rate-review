@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, InputRequired, EqualTo, Length, Regexp
 
-from util.validators import Unique, ValidUser
+from util.validators import Unique, ValidUser, ValidateCurrentPass
 from models import User
 
 
@@ -84,11 +84,12 @@ class PassResetForm(FlaskForm):
 
 # Form to change password given that you know the old password
 class ChangePassForm(FlaskForm):
-    old_password = PasswordField('Old Password',
-                             validators=[
-                                 InputRequired(),
-                             ],
-                             render_kw={'placeholder': 'Password'})
+    current_password = PasswordField('Current Password',
+                                     validators=[
+                                         InputRequired(),
+                                         ValidateCurrentPass()
+                                     ],
+                                     render_kw={'placeholder': 'Current Password'})
 
     password = PasswordField('Create Password',
                              validators=[
@@ -97,10 +98,37 @@ class ChangePassForm(FlaskForm):
                                  Regexp('(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*-_]).+', message="Password must contain at least: 1 lowercase letter, 1 uppercase letter, 1 number, and special character (!@#$%^&*-_)"),
                                  Length(min=8, max=25, message="Password must be between 8 & 25 characters")
                              ],
-                             render_kw={'placeholder': 'Password'})
+                             render_kw={'placeholder': 'New Password'})
 
-    confirm = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm password'})
+    confirm = PasswordField('Confirm Password', render_kw={'placeholder': 'Confirm new password'})
     submit = SubmitField('Change Password')
 
+
+class ChangeUsername(FlaskForm):
+    username = StringField("Username",
+                           validators=[
+                               DataRequired(),
+                               Regexp('^\w+$', message="Username can contain only letters, numbers and underscores"),
+                               Length(min=4, max=15, message="Username must be between 4 & 15 characters"),
+                               Unique(User, User.username, message='This username already exists. Pick a new one.')
+                           ],
+                           render_kw={'placeholder': 'New Username'})
+    current_password = PasswordField('Current Password',
+                                     validators=[
+                                         InputRequired(),
+                                         ValidateCurrentPass()
+                                     ],
+                                     render_kw={'placeholder': 'Current Password'})
+    submit = SubmitField('Change Username')
+
+
+class DeleteAccount(FlaskForm):
+    current_password = PasswordField('Password',
+                                     validators=[
+                                         InputRequired(),
+                                         ValidateCurrentPass()
+                                     ],
+                                     render_kw={'placeholder': 'Password'})
+    submit = SubmitField('DELETE NOW')
 
 

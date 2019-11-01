@@ -1,17 +1,11 @@
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect
 from flask_login import current_user
 from third_party_api.goodreads_api import get_reviews, get_review_stats
 from models import Books
+from helpers import redirect_back
 from ext import db
 
 book_pg = Blueprint('book_pg', __name__)
-
-
-# Helper function to redirect to previous page.
-def redirect_url(default='user.user_profile'):
-    return request.args.get('next') or \
-           request.referrer or \
-           url_for(default)
 
 
 @book_pg.route('/book_page/<int:book_id>/<string:title>/<string:author>/<string:year>/<string:isbn>/<path:image_url>')
@@ -32,7 +26,7 @@ def add_to_bookshelf(book_id):
     book = Books.query.get(book_id)
     current_user.add_book(book)
     db.session.commit()
-    return redirect(redirect_url())
+    return redirect(redirect_back('user.user_profile'))
 
 
 @book_pg.route('/rate-and-review')

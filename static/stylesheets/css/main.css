@@ -256,8 +256,14 @@
 }
 
 .profile-header {
-  background-color: #a0a0a0;
+  background-color: rgba(241, 241, 241, 0.44);
   height: 10%;
+}
+
+.sb-center-text {
+  margin-top: 110%;
+  font-weight: bold;
+  color: white;
 }
 
 /************************************************************************
@@ -298,6 +304,10 @@ nav {
 
 p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
   text-decoration: none !important;
+}
+
+a:active {
+  outline: none;
 }
 
 @media only screen and (min-device-width: 920px) {

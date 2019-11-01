@@ -1,0 +1,22 @@
+{% extends 'user_account/settings.html' %}
+{% block settings %}
+<div class = "form-container rounded mt-5">
+    <form method="POST">
+    <p class="h4 mb-4 text-center">Delete Account</p>
+      {{ form.csrf_token }}
+      {{ form.hidden_tag() }}
+      <p>To delete your account enter your password and click on delete now.</p>
+      <div class="form-group">
+          {{ form.current_password(class="form-control") }}
+          <ul>
+              {% for error in form.current_password.errors %}
+                <li class="field_errors_msg ml-3">{{ error }}</li>
+            {% endfor %}
+          </ul>
+      </div>
+      <div class="text-center">
+        {{ form.submit(class="btn btn-danger shadow-none") }}
+      </div>
+    </form>
+</div>
+{% endblock %}

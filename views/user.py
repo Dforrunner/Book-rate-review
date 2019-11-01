@@ -1,7 +1,10 @@
-from flask import Blueprint, render_template, request, url_for, redirect, current_app as app
+import traceback
+from flask import Blueprint, render_template, request, url_for, redirect, flash, current_app as app
 from util.decorators import check_confirmed
-from flask_login import login_required, current_user
+from flask_login import login_required, logout_user, current_user
 from views.accounts import user_not_signed_in
+from forms.account_forms import ChangePassForm, DeleteAccount, ChangeUsername
+from ext import db
 
 user = Blueprint('user', __name__, url_prefix='/profile')
 
@@ -38,8 +41,86 @@ def bookshelf():
                            section_tittle='Bookshelf')
 
 
-@user.route('/settings')
+@user.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    return render_template('user_account/settings.html', user=current_user, section_tittle='Settings')
+    return render_template('user_account/settings/setting_options.html',
+                           user=current_user,
+                           section_tittle='Settings',
+                           showBackArrow=False)
 
+
+@user.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePassForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                u = current_user
+                u.set_password(form.password.data)
+                db.session.commit()
+            except:
+                flash("An error occured while attempting to change your password. Please try again later.", 'danger')
+                return render_template('user_account/settings/change_password.html',
+                                       user=current_user,
+                                       form=form,
+                                       section_tittle='Change Password',
+                                       showBackArrow=True)
+            flash("Password successfully changed.", "success")
+    return render_template('user_account/settings/change_password.html',
+                           user=current_user,
+                           form=form,
+                           section_tittle='Change Password',
+                           showBackArrow=True)
+
+
+@user.route('/change-username', methods=['GET', 'POST'])
+@login_required
+def change_username():
+    form = ChangeUsername()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                u = current_user
+                u.username = form.username.data
+                db.session.commit()
+            except:
+                flash("An error occurred while attempting to change your username. Please try again later. ", 'danger')
+                return render_template('user_account/settings/change_username.html',
+                                       user=current_user,
+                                       form=form,
+                                       section_tittle='Change Username',
+                                       showBackArrow=True)
+
+            flash("Username successfully change.", 'success')
+    return render_template('user_account/settings/change_username.html',
+                           user=current_user,
+                           form=form,
+                           section_tittle='Change Username',
+                           showBackArrow=True)
+
+
+@user.route('/delete-account', methods=['GET', 'POST'])
+@login_required
+def delete_account():
+    form = DeleteAccount()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            try:
+                db.session.delete(current_user)
+                db.session.commit()
+            except:
+                flash('An error occurred when attempting to delete your account. Please try again later.', 'danger')
+                return render_template('user_account/settings/delete_account.html',
+                                       user=current_user,
+                                       form=form,
+                                       section_tittle='Delete Account',
+                                       showBackArrow=True)
+            flash("Account successfully deleted. We'll miss you!", 'success')
+            return redirect(url_for('main.home'))
+    return render_template('user_account/settings/delete_account.html',
+                           user=current_user,
+                           form=form,
+                           section_tittle='Delete Account',
+                           showBackArrow=True)

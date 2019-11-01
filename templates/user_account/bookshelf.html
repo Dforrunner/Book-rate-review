@@ -6,7 +6,7 @@
             <!-- message variable is empty by default so the length is less than 2 unless there are no search results found.
                 in which case a longer string message is assigned making the length longer than 2 -->
             {% if message|length > 2 %}
-                <div class="text-center mt-5">{{ message }}</div>
+                <div class="text-center mt-5 w-100">{{ message }}</div>
             {% endif %}
             <!-- Books in bookshelf Paginated-->
             {% for book in bookshelf.items %}

@@ -5,13 +5,14 @@ from ext import login_manager, db
 from flask_login import current_user, login_user, logout_user, login_required
 from is_safe_url import is_safe_url
 # Forms
-from forms.account_forms import SignInForm, SignUpForm, PassResetEmailForm, PassResetForm, ChangePassForm
+from forms.account_forms import SignInForm, SignUpForm, PassResetEmailForm, PassResetForm
 # Utils
 from util.token import generate_confirmation_token, confirm_token
 from util.email import send_email
-from util.validators import ValidUser
 # User model
 from models import User
+# Helper functions
+from helpers import redirect_to_profile, redirect_back
 
 account = Blueprint('account', __name__)
 
@@ -38,12 +39,8 @@ def validate_email_verification_url(token):
     return email
 
 
-# Helper method to redirect users to their profile if they are already logged in
-def redirect_to_profile():
-    return url_for('user.user_profile', username=current_user.username)
-
-
 @account.route('/signout')
+@login_required
 def signout():
     logout_user()
     return redirect(url_for('main.home'))
@@ -137,13 +134,17 @@ def unconfirmed():
 @account.route('/resend')
 @login_required
 def resend_confirmation():
-    token = generate_confirmation_token(current_user.email)
-    confirm_url = url_for('account.confirm_email', token=token, _external=True)
-    html = render_template('user_account/account_activation/confirmation_email.html', confirm_url=confirm_url, username=current_user.username)
-    subject = "Book R&R Email Confirmation"
-    send_email(current_user.email, subject, html)
+    try:
+        token = generate_confirmation_token(current_user.email)
+        confirm_url = url_for('account.confirm_user', token=token, _external=True)
+        html = render_template('user_account/account_activation/confirmation_email.html', confirm_url=confirm_url, username=current_user.username)
+        subject = "Book R&R Email Confirmation"
+        send_email(current_user.email, subject, html)
+    except:
+        flash('An error occurred while attempting to resend confirmation email. Please try again later. ', 'danger')
+        return redirect(url_for('account.unconfirmed'))
     flash('A new confirmation email has been sent.', 'success')
-    return redirect(url_for('account.unconfirmed'))
+    return redirect(redirect_back('account.unconfirmed'))
 
 
 """******* ACTIVATE USER END******"""
@@ -181,19 +182,6 @@ def confirm_pass_reset_url(token):
         return render_template('user_account/pass_reset/reset_forgotten_pass.html', form=form)
     else:
         flash('Error trying to validate email. Try again.', 'danger')
-
-
-@account.route('/change-password', methods=["GET", "POST"])
-def change_password():
-    form = ChangePassForm()
-    if request.method == 'POST':
-        # Validate user's current password
-        ValidUser(current_user, current_user.check_password(pw=form.old_password.data), message="The old password is incorrect.")
-        if form.validate_on_submit():
-            current_user.set_password(form.password.data)
-            db.session.commit()
-            flash('You successfully changed your password.', 'success')
-    return
 
 
 """******* RESET PASSWORD END ******"""

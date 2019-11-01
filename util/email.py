@@ -8,14 +8,13 @@ if not app.config['MAIL_DEFAULT_SENDER']:
 
 
 def send_email(to, subject, template):
-    with app.app_context():
-        msg = Message(
-            subject,
-            recipients=[to],
-            html=template,
-            sender=app.config['MAIL_DEFAULT_SENDER']
-        )
-        try:
-            mail.send(msg)
-        except ConnectionRefusedError:
-            print("Email not sent")
+    msg = Message(
+        subject,
+        recipients=[to],
+        html=template,
+        sender=app.config['MAIL_DEFAULT_SENDER']
+    )
+    try:
+        mail.send(msg)
+    except ConnectionRefusedError:
+        print("Email not sent")

@@ -2,8 +2,12 @@
 {% block title %} Settings {% endblock %}
 
 {% block profile_body %}
-<!-- Todo: implement change password -->
-<!-- Todo: Implement remove account -->
-<!-- Todo: Implement change username -->
-<!-- Todo: Implement user bio -->
+
+    {% if showBackArrow %}
+        <a href="{{ url_for('user.settings') }}">
+            <h7><i class="fas fa-arrow-left"></i> Back</h7>
+        </a>
+    {% endif %}
+
+   {% block settings %}{% endblock %}
 {% endblock %}
