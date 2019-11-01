@@ -42,7 +42,7 @@
 **********************************************************************/
 // these are the buttons that are overlayed over the book images
 @mixin quick-button-position{
-      position: fixed;
+      position: absolute;
       margin-top: -10px;
       margin-left: -10px;
       width: 35px;

@@ -27,11 +27,11 @@ nav{
 }
 p:hover, p:visited, p:active, a:hover, a:visited, a:link, a:active {
     text-decoration: none !important;
+    outline: 0;
 }
-a:active{
-    outline: none;
+input::-moz-focus-inner {
+  border: 0;
 }
-
 // Search bar ==================
 #search-bar{
     @include desktop{
