@@ -16,3 +16,23 @@
   font-weight: bold;
   color: white;
 }
+
+.overlay-add-rm-btn{
+  > span{
+     @include quick-button-position;
+  }
+
+  > .rm-book{
+    display: none;
+  }
+
+  &:hover{
+    > .book-check{
+      display: none;
+    }
+
+    > .rm-book{
+      display: inline;
+    }
+  }
+}

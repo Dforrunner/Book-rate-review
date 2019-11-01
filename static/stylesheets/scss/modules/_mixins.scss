@@ -40,3 +40,12 @@
 /************************************************************************
                                 Gradients
 **********************************************************************/
+// these are the buttons that are overlayed over the book images
+@mixin quick-button-position{
+      position: fixed;
+      margin-top: -10px;
+      margin-left: -10px;
+      width: 35px;
+      height: 35px;
+      z-index: 15;
+}

@@ -27,13 +27,18 @@
     }
 
     &:hover .book_block_img{
-        margin-top: -70px;
+        margin-top: -100px;
+    }
+
+    &:hover .add-book{
+        display: inline;
     }
 }
 
 .book_block_img{
     height: 100%;
     width: 100%;
+    vertical-align: middle;
     border-top-left-radius: 2px;
     border-top-right-radius: 2px;
     border-bottom: 1px solid $border-color;
@@ -52,6 +57,15 @@
     color: $text;
     font-size: 12px;
     font-family: $primary-font;
+}
+
+.overlay-plus-btn{
+    > span{
+        @include quick-button-position;
+    }
+    > .add-book{
+        display: none;
+    }
 }
 
 /*

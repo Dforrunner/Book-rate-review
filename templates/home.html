@@ -12,20 +12,25 @@
     <div class="row">
         {% for book in books.items %}
             <!-- book.image[7:] removes "http://" from the beginning of the link. This is added back in the book_page.html like so: "http://" + image_url -->
-            <a class="home_page_books" href="{{ url_for('book_pg.book_page', book_id=book.id, isbn=book.isbn, title=book.title, author=book.author, year=book.year, image_url=book.image[7:])}}">
-                <img class="book_block_img" src="{{book.image}}">
-                <p class="text-dark book_block_title">{{ book.title }}</p>
-                <div class="book_block_info">
-                    <div class="star-ratings-small">
-                        <div class="star-ratings-top" style="width: 100%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-                        <div class="star-ratings-bottom"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+        <div class="home_page_books" >
+                <a class="text-center overlay-plus-btn" href="{{ url_for('book_pg.add_to_bookshelf', book_id=book.id) }}">
+                    <span class="btn-info shadow-none rounded-circle add-book "><i class="p-2 fas fa-plus"></i></span>
+                </a>
+                <a href="{{ url_for('book_pg.book_page', book_id=book.id, isbn=book.isbn, title=book.title, author=book.author, year=book.year, image_url=book.image[7:])}}">
+                    <img class="book_block_img" src="{{book.image}}">
+                    <p class="text-dark book_block_title">{{ book.title }}</p>
+                    <div class="book_block_info">
+                        <div class="star-ratings-small">
+                            <div class="star-ratings-top" style="width: 100%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                            <div class="star-ratings-bottom"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+                        </div>
+                        <p>
+                           By: {{ book.author }}<br>
+                           Year: {{ book.year }}
+                        </p>
                     </div>
-                    <p>
-                       By: {{ book.author }}<br>
-                       Year: {{ book.year }}
-                    </p>
-                </div>
-            </a>
+                </a>
+        </div>
         {% endfor %}
     </div>
     <div class="mt-2 ">
