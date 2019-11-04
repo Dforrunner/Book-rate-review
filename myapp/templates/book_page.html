@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% block title %}Book Details{% endblock %}
+
+{% block body %}
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-4">
+                <img class="img-fluid" src="{{"https://" + image_url}}">
+            </div>
+            <div class="col-8">
+                <h3 class="">{{ title }}</h3>
+                <div class="row">
+                    <!-- TODO: fix percents. star rating not showing the right star rating -->
+                    <div class="star-ratings-large col-2">
+                        <div class="star-ratings-top" style="width: {{ review_stat.percent_avg_rating|safe }}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                        <div class="star-ratings-bottom"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
+                    </div>
+                    <div class="col-1 pl-4">{{ review_stat.rating_count|safe }}</div>
+                </div>
+                <div class="row">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.confirmed %}
+                            {% if book_in_bookshelf %}
+                                <a class="book-add-rm-group position-relative" href="{{ url_for('book_pg.remove_from_bookshelf', book_id=book_id) }}">
+                                    <span class="btn btn-success book-added-btn position-absolute"><i class="fas fa-check"></i> Book Added </span>
+                                    <span class="btn btn-danger remove-book-btn position-absolute"><i class="fas fa-times"></i> Remove Book</span>
+                                </a>
+                            {% else %}
+                                <a class="btn btn-danger" href="{{ url_for('book_pg.add_to_bookshelf', book_id=book_id) }}">Add to bookshelf</a>
+                            {% endif %}
+
+                        {% else %}
+                            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#confirmationReqModal">Add to bookshelf</button>
+                            {% include 'bootstrapModals/e_conf_req_modal.html' %}
+
+                        {% endif %}
+                    {% else %}
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#signinReqModal">Add to bookshelf</button>
+                        {% include 'bootstrapModals/signin_required_modal.html' %}
+                    {% endif %}
+                </div>
+                <div class="row">
+                     <table class="table">
+                         <tbody>
+                            <tr>
+                              <th scope="row">ISBN</th>
+                              <td>{{ review_stat.isbn|safe }}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">ISBN13</th>
+                              <td>{{ review_stat.isbn13|safe }}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Total reviews</th>
+                              <td>{{ review_stat.review_count|safe }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {{ review_widget|safe }}
+    </div>
+{% endblock %}

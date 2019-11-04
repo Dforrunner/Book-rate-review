@@ -1,0 +1,19 @@
+@import "modules/variables";
+@import "modules/mixins";
+
+.book-add-rm-group{
+  height: 60px;
+  width: 300px;
+
+  > .remove-book-btn{
+    display: none;
+  }
+  &:hover{
+    > .book-added-btn{
+      display: none;
+    }
+    > .remove-book-btn{
+      display: inline;
+    }
+  }
+}

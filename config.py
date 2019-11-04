@@ -1,14 +1,25 @@
 import os
 
+if not os.getenv("SECRET_KEY"):
+    raise Exception(" ERROR: Secret key is not set.")
+if not os.environ.get("DATABASE_URL"):
+    raise Exception('ERROR: Database Url is not set.')
+if not os.environ.get("SECURITY_PASSWORD_SALT"):
+    raise Exception('ERROR: Security password salt is not set.')
+if not os.environ.get("APP_MAIL_USERNAME"):
+    raise Exception('ERROR: Mail username is not set')
+if not os.environ.get("APP_MAIL_PASSWORD"):
+    raise Exception('ERROR: Mail password is not set.')
+
 
 class Config(object):
     """Base configurations"""
 
     # main config
-    SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SECRET_KEY = os.getenv("SECRET_KEY")  # TODO: set SECRET_KEY
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")  # TODO: set DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")
+    SECURITY_PASSWORD_SALT = os.environ.get("SECURITY_PASSWORD_SALT")  # TODO: set SECURITY_PASSWORD_SALT
     DEBUG = False
     WTF_CSRF_ENABLED = True
     DEBUG_TB_ENABLED = False
@@ -22,11 +33,11 @@ class Config(object):
     MAIL_USE_SSL = True
 
     # Gmail authentication
-    MAIL_USERNAME = os.environ.get("APP_MAIL_USERNAME")
-    MAIL_PASSWORD = os.environ.get("APP_MAIL_PASSWORD")
+    MAIL_USERNAME = os.environ.get("APP_MAIL_USERNAME")  # your email TODO: set APP_MAIL_USERNAME
+    MAIL_PASSWORD = os.environ.get("APP_MAIL_PASSWORD")  # TODO: set APP_MAIL_PASSWORD
 
     # mail accounts
-    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")  # also your email TODO: set MAIL_DEFAULT_SENDER
 
     # Todo: update allowed host before launch
     # Allowed hosts
