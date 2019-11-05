@@ -1,4 +1,4 @@
-Book Rate and Review App.
+Book Rate and Review App. Here is the link: https://book-rate-review.herokuapp.com/
 This is simple project I'm working on to learn Flask. 
 
 Current functionalities of the site are: 
